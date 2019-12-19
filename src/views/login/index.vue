@@ -38,6 +38,7 @@
 
 <script>
 // import { log } from 'util'
+// import { log } from 'util'
 export default {
   data () {
     return {
@@ -79,9 +80,27 @@ export default {
   methods: {
     // 手动校验
     submitLogin () {
-      this.$refs.myform.validate(function (isok) {
+      this.$refs.myform.validate((isok) => {
         if (isok) {
-          console.log('校验成功')
+          this.$axios({
+            // 请求地址
+            // axios如果没有设置请求类型默认是get
+            // axios 这种形式调用的话有两种参数
+            // 1种是body参数，放在请求体里面，也就是放在axios的data对象里面
+            // 2get参数又成地址参数，路由参数，get参数放在axios的params里
+            url: '/authorizations',
+            method: 'post', // 类型
+            data: this.loginForm
+
+          }).then(result => {
+            // then只接收正确结果
+            // 前端缓存登录成功返回给我们令牌
+            // 设置前端缓存setitem
+            window.localStorage.setItem('user-token', result.data.data.token)
+            console.log(result)
+          }).catch({
+            // 接收错误的参数
+          })
         }
       })
     }
