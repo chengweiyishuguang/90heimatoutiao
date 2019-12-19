@@ -97,9 +97,13 @@ export default {
             // 前端缓存登录成功返回给我们令牌
             // 设置前端缓存setitem
             window.localStorage.setItem('user-token', result.data.data.token)
-            console.log(result)
-          }).catch({
+            this.$router.push('/Home')// 登录成功跳转到主页
+          }).catch(() => {
             // 接收错误的参数
+            this.$message({
+              type: 'waring',
+              message: '手机号或验证码错误'
+            })
           })
         }
       })
