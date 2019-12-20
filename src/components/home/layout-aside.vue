@@ -1,29 +1,34 @@
 <template>
 <!-- 左侧导航组件 -->
+<!-- 开启路由elementul -->
+<!-- 路由elementul跳转地址用index -->
 <div class="layout-aside">
     <div class="title">
         <img src="../../assets/img/logo_admin.png" alt="">
     </div>
-    <el-menu background-color="#353b4e" text-color="#adafb5" active-text-color="#ffd04b">
+    <!-- 开启路由可以用：router='true'的模式 -->
+    <!-- 简写router效果是一样的 -->
+
+    <el-menu  router background-color="#353b4e" text-color="#adafb5" active-text-color="#ffd04b">
         <!-- 没有折叠选项 -->
-        <el-menu-item>首页</el-menu-item>
+        <el-menu-item index="/home">首页</el-menu-item>
         <!-- 二级折叠菜单 -->
-        <el-submenu>
+        <el-submenu index="1">
             <!-- 定义具名插槽让它再一级菜单显示 -->
            <template slot='title'>内容管理</template>
-          <el-menu-item>发布文章</el-menu-item>
-          <el-menu-item>文章列表</el-menu-item>
-          <el-menu-item>评论管理</el-menu-item>
-          <el-menu-item>素材管理</el-menu-item>
+          <el-menu-item index="/home/publish">发布文章</el-menu-item>
+          <el-menu-item index="/home/articles">文章列表</el-menu-item>
+          <el-menu-item index="/home/comment">评论管理</el-menu-item>
+          <el-menu-item index="/home/material">素材管理</el-menu-item>
         </el-submenu>
         <!-- 二级插槽粉丝信息 -->
-        <el-submenu>
+        <el-submenu index="2">
             <!-- 定义具名插槽让它再一级菜单显示 -->
            <template slot='title'>粉丝管理</template>
-          <el-menu-item>图文数据</el-menu-item>
-          <el-menu-item>粉丝情况</el-menu-item>
-          <el-menu-item>粉丝画像</el-menu-item>
-          <el-menu-item>粉丝列表</el-menu-item>
+          <el-menu-item index="/home/picture">图文数据</el-menu-item>
+          <el-menu-item index="/home/fansinfo">粉丝情况</el-menu-item>
+          <el-menu-item index="/home/fansphoto">粉丝画像</el-menu-item>
+          <el-menu-item index="/home/fanslist">粉丝列表</el-menu-item>
         </el-submenu>
 
          <el-menu-item>账户信息</el-menu-item>
