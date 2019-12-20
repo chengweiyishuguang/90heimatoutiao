@@ -10,6 +10,7 @@
     <el-container>
       <!-- 上下布局 -->
       <el-header>
+        <!-- 头部组件 -->
         <layout-header></layout-header>
       </el-header>
       <el-main>
@@ -21,17 +22,9 @@
 </template>
 
 <script>
-// 引入侧边导航组件
-import layOutAside from '../../components/home/layout-aside'
-// 引入头部组件
-import layOutHeader from '../../components/home/layout-header'
 
 export default {
-// 注册局部组件
-  components: {
-    'layout-aside': layOutAside,
-    'layout-header': layOutHeader
-  }
+
 }
 </script>
 
