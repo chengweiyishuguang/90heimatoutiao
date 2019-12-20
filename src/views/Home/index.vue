@@ -1,13 +1,37 @@
 <template>
-  <div>
-      主页
+<!-- 先放一个大容器 -->
+  <el-container>
+    <!-- 左边的容器 -->
+    <el-aside>
+      <!-- 使用组件 -->
+      <layout-aside style="background-color:#353b4e;height:100vh"></layout-aside>
+    </el-aside>
+     <!-- 右侧容器 -->
+    <el-container>
+      <!-- 上下布局 -->
+      <el-header>
+        <layout-header></layout-header>
+      </el-header>
+      <el-main>
+        主要区域
+      </el-main>
+    </el-container>
+  </el-container>
 
-  </div>
 </template>
 
 <script>
-export default {
+// 引入侧边导航组件
+import layOutAside from '../../components/home/layout-aside'
+// 引入头部组件
+import layOutHeader from '../../components/home/layout-header'
 
+export default {
+// 注册局部组件
+  components: {
+    'layout-aside': layOutAside,
+    'layout-header': layOutHeader
+  }
 }
 </script>
 
