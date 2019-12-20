@@ -6,11 +6,11 @@
     </el-col>
       <el-col class="right" :span="12" >
           <el-row type="flex" justify="end" align="middle">
-              <img src="../../assets/img/loginIMG.jpg" alt="">
+            <!-- 头像区域用三元表达式确认用户是否上传了图片，如果没上传给一个默认头像 -->
+              <img :src="!userInfo.photo ? userInfo.photo :defaultImg" alt="">
               <el-dropdown>
                   <span>
-                    成为一束光
-                    {{userInfo}}
+                    {{userInfo.name}}
                   </span>
                   <el-dropdown-menu slot="dropdown">
                       <el-dropdown-item>个人信息</el-dropdown-item>
@@ -25,28 +25,31 @@
 </template>
 
 <script>
+//
 export default {
-//   data () {
-//     return {
-//       userInfo: {}// 定义一个用户对象
+  data () {
+    return {
+      userInfo: {}, // 定义一个用户对象
+      // 如果遇到图片需要做动态变量时先用require包裹一个地址转换成一个变量再用变量做逻辑判断
+      defaultImg: require('../../assets/img/loginIMG.jpg')// 先将图片转化成了一个变量
 
-  //     }
-  //   },
-  //   // 已进入页面就开始查询，用生命周期的钩子函数
-  //   created () {
-  //     // 从前端缓存中获取令牌
-  //     let token = localStorage.getItem('user-token')// 获取用户令牌
-  //     this.$axios({
-  //       // 地址
-  //       url: 'user/profile',
-  //       headers: {
-  //         Authorization: `Bearer ${token}`
-  //       }
+    }
+  },
+  // 已进入页面就开始查询，用生命周期的钩子函数
+  created () {
+    // 从前端缓存中获取令牌
+    let token = localStorage.getItem('user-token')// 获取用户令牌
+    this.$axios({
+      // 地址
+      url: '/user/profile',
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
 
-  //     }).then(result => {
-  //       this.userInfo = result.data.data
-  //     })
-  //   }
+    }).then(result => {
+      this.userInfo = result.data.data
+    })
+  }
 
 }
 </script>
