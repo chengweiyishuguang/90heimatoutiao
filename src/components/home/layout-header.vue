@@ -8,14 +8,14 @@
           <el-row type="flex" justify="end" align="middle">
             <!-- 头像区域用三元表达式确认用户是否上传了图片，如果没上传给一个默认头像 -->
               <img :src="!userInfo.photo ? userInfo.photo :defaultImg" alt="">
-              <el-dropdown>
+              <el-dropdown @command="clickmenu">
                   <span>
                     {{userInfo.name}}
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                      <el-dropdown-item>个人信息</el-dropdown-item>
-                       <el-dropdown-item>git地址</el-dropdown-item>
-                        <el-dropdown-item>退出</el-dropdown-item>
+                      <el-dropdown-item command="info">个人信息</el-dropdown-item>
+                       <el-dropdown-item command="git">git地址</el-dropdown-item>
+                        <el-dropdown-item command="lgout">退出</el-dropdown-item>
                   </el-dropdown-menu>
 
               </el-dropdown>
@@ -49,6 +49,22 @@ export default {
     }).then(result => {
       this.userInfo = result.data.data
     })
+  },
+  methods: {
+    // 点击菜单项时触发
+    clickmenu (command) {
+      // this.$message('触发了' + command)
+      if (command === 'info') {
+
+      } else if (command === 'git') {
+        window.location.href = 'https://github.com/chengweiyishuguang/90heimatoutiao'
+      } else {
+        window.localStorage.removeItem('user-token')// 删除令牌
+        // 回到login
+        this.$router.push('/login')
+      }
+    }
+
   }
 
 }
