@@ -10,6 +10,7 @@
               <el-dropdown>
                   <span>
                     成为一束光
+                    {{userInfo}}
                   </span>
                   <el-dropdown-menu slot="dropdown">
                       <el-dropdown-item>个人信息</el-dropdown-item>
@@ -25,6 +26,27 @@
 
 <script>
 export default {
+//   data () {
+//     return {
+//       userInfo: {}// 定义一个用户对象
+
+  //     }
+  //   },
+  //   // 已进入页面就开始查询，用生命周期的钩子函数
+  //   created () {
+  //     // 从前端缓存中获取令牌
+  //     let token = localStorage.getItem('user-token')// 获取用户令牌
+  //     this.$axios({
+  //       // 地址
+  //       url: 'user/profile',
+  //       headers: {
+  //         Authorization: `Bearer ${token}`
+  //       }
+
+  //     }).then(result => {
+  //       this.userInfo = result.data.data
+  //     })
+  //   }
 
 }
 </script>
