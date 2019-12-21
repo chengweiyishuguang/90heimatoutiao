@@ -9,11 +9,10 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    redirect: '/Home'// 强制跳转
+    redirect: '/home'// 强制跳转
   },
   {
-    path: '/Home',
-    name: 'home',
+    path: '/home',
     component: Home,
     children: [{
       path: '',
