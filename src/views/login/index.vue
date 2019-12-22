@@ -98,13 +98,14 @@ export default {
             // 设置前端缓存setitem
             window.localStorage.setItem('user-token', result.data.token)
             this.$router.push('/home')// 登录成功跳转到主页
-          }).catch(() => {
-            // 接收错误的参数
-            this.$message({
-              type: 'waring',
-              message: '手机号或验证码错误'
-            })
           })
+          // .catch(() => {
+          //   // 接收错误的参数
+          //   this.$message({
+          //     type: 'waring',
+          //     message: '手机号或验证码错误'
+          //   })
+          // })
         }
       })
     }
