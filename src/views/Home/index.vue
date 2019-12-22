@@ -4,7 +4,7 @@
     <!-- 左边的容器 -->
     <el-aside>
       <!-- 使用组件 -->
-      <layout-aside style="background-color:#353b4e;height:100vh"></layout-aside>
+      <layout-aside style="min-height:100vh; background-color:#353b4e;"></layout-aside>
     </el-aside>
      <!-- 右侧容器 -->
     <el-container>

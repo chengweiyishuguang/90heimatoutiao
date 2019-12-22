@@ -1,22 +1,13 @@
-// // 封装一个axios
+// // // 封装一个axios
 
-// // 引入axios
+// // // 引入axios
 import axios from 'axios'
 import router from '../router'
 import { Message } from 'element-ui'
-axios.defaults.baseURL = 'http://ttapi.research.itcast.cn/app/v1_0'
-// 请求拦截
-// axios.interceptors.request.use(function (config) {
-// 下方为错误代码，少Item 粗心害死人
-//   let token = window.localStorage.get('user-token')
-//
-//   config.headers.Authorization = `Bearer ${token}`
-//
-//   return config
-// }, function () {
-//   // zhixing
-// })
+// axios.defaults.baseURL = 'http://ttapi.research.itcast.cn/app/v1_0'
 
+axios.defaults.baseURL = 'http://ttapi.research.itcast.cn/mp/v1_0'
+// // 请求拦截
 axios.interceptors.request.use(function (config) {
   // 执行请求
   let token = window.localStorage.getItem('user-token')// 获取token
@@ -32,9 +23,13 @@ axios.interceptors.request.use(function (config) {
 // 响应拦截器
 axios.interceptors.response.use(function (response) {
 // 成功时执行该函数
+  // return response.data ? response.data : {}
   return response.data ? response.data : {}
 }, function (error) {
   // 失败时执行该函数
+  // debugger
+  // console.log(error)
+
   let status = error.response.status
   let message = ''
   switch (status) {
