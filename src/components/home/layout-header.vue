@@ -39,13 +39,13 @@ export default {
   // 已进入页面就开始查询，用生命周期的钩子函数
   created () {
     // 从前端缓存中获取令牌
-    let token = localStorage.getItem('user-token')// 获取用户令牌
+    // let token = localStorage.getItem('user-token')// 获取用户令牌
     this.$axios({
       // 地址
-      url: '/user/profile',
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
+      url: '/user/profile'
+      // headers: {
+      //   Authorization: `Bearer ${token}`
+      // }
 
     }).then(result => {
       this.userInfo = result.data.data

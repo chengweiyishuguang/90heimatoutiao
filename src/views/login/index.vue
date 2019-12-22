@@ -96,7 +96,7 @@ export default {
             // then只接收正确结果
             // 前端缓存登录成功返回给我们令牌
             // 设置前端缓存setitem
-            window.localStorage.setItem('user-token', result.data.data.token)
+            window.localStorage.setItem('user-token', result.data.token)
             this.$router.push('/home')// 登录成功跳转到主页
           }).catch(() => {
             // 接收错误的参数
