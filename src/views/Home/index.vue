@@ -2,9 +2,9 @@
 <!-- 先放一个大容器 -->
   <el-container>
     <!-- 左边的容器 -->
-    <el-aside>
+    <el-aside style="min-height:100vh;background-color:#353b4e; width:230px">
       <!-- 使用组件 -->
-      <layout-aside style="min-height:100vh; background-color:#353b4e;"></layout-aside>
+      <layout-aside></layout-aside>
     </el-aside>
      <!-- 右侧容器 -->
     <el-container>

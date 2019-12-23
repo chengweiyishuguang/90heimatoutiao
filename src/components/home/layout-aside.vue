@@ -9,7 +9,7 @@
     <!-- 开启路由可以用：router='true'的模式 -->
     <!-- 简写router效果是一样的 -->
 
-    <el-menu  router background-color="#353b4e" text-color="#adafb5" active-text-color="#ffd04b">
+    <el-menu style="border:0" router background-color="#353b4e" text-color="#adafb5" active-text-color="#ffd04b">
         <!-- 没有折叠选项 -->
         <el-menu-item index="/home">首页</el-menu-item>
         <!-- 二级折叠菜单 -->
