@@ -3,6 +3,7 @@
 // // // 引入axios
 import axios from 'axios'
 import router from '../router'
+import JSONBig from 'json-bigint'// 引入第三方包
 import { Message } from 'element-ui'
 // axios.defaults.baseURL = 'http://ttapi.research.itcast.cn/app/v1_0'
 
@@ -19,6 +20,9 @@ axios.interceptors.request.use(function (config) {
 // 导出axios,然后main.js里面引入，然后把main.js里面的axios第三方的包换城request
 // 把设置的常态之引入到此文件
 // 把lay-header里面的手动获取令牌参数去掉
+axios.defaults.transformResponse = [function (data) {
+  return JSONBig.parse(data)// 解决js处理大数据失真问题
+}]
 
 // 响应拦截器
 axios.interceptors.response.use(function (response) {
@@ -54,5 +58,8 @@ axios.interceptors.response.use(function (response) {
       break
   }
   Message({ type: 'warning', message })// 提示消息，删除登录页的提示消息
+  // 注意我们的错误执行函数不做任何操作还会进入promise.then中
+  // 直接return出reject值是error告诉它错了
+  return Promise.reject(error)
 })
 export default axios
