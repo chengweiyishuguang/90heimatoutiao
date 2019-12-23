@@ -60,6 +60,6 @@ axios.interceptors.response.use(function (response) {
   Message({ type: 'warning', message })// 提示消息，删除登录页的提示消息
   // 注意我们的错误执行函数不做任何操作还会进入promise.then中
   // 直接return出reject值是error告诉它错了
-  return Promise.reject(error)
+  return Promise.reject(error)// 只要reject就会进入catch中
 })
 export default axios
