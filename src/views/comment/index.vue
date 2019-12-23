@@ -17,10 +17,21 @@
         <el-button type="text" size="small">修改</el-button>
         <el-button @click='openOrCloseState(obj.row)' type="text" size="small">{{obj.row.comment_status?'关闭':'打开'}}评论</el-button>
         </template>
-
       </el-table-column>
-
     </el-table>
+    <el-row type="flex" justify="center" align="middle" style="height:80px">
+<el-pagination
+  background
+  layout="prev, pager, next"
+  :total="page.total"
+  :page-size="page.pageSize"
+  :current-page="page.currentPage"
+  @current-change="changepage"
+
+  >
+</el-pagination>
+    </el-row>
+
   </el-card>
 </template>
 
@@ -29,16 +40,27 @@ export default {
   data () {
     // 定义一个数据接收返回结果
     return {
-      list: []
+      list: [],
+      page: {
+        total: 0, // 总条数
+        pageSize: 10, // 默认每页条数为10
+        currentPage: 1// 默认页码为1
+
+      }
     }
   },
   methods: {
+    changepage (newpage) {
+      this.page.currentPage = newpage
+      this.getComment()
+    },
     getComment () {
       this.$axios({
         url: '/articles',
-        params: { response_type: 'comment' }
+        params: { response_type: 'comment', page: this.page.currentPage, per_page: this.page.pageSize }
       }).then(result => {
         this.list = result.data.results
+        this.page.total = result.data.total_count// 总条数
       })
     },
     formatterBoolean (row, column, cellValue, index) {
