@@ -1,11 +1,16 @@
 <template>
-  <el-card>
+  <el-card v-loading="loading">
       <bread-crumb slot="header">
       <template slot="title">
           素材管理
 
       </template>
       </bread-crumb>
+      <el-row type="flex" justify="end">
+          <el-upload action="" :http-request="uploadImg" :show-file-list="false">
+              <el-button type="primary" size="small">上传图片</el-button>
+          </el-upload>
+      </el-row>
       <el-tabs v-model="activeName" @tab-click="changetab">
           <el-tab-pane label="全部图片" name='all'>
               <!-- 生成页面解构 -->
@@ -53,6 +58,7 @@
 export default {
   data () {
     return {
+      loading: false,
       activeName: 'all', // 当前选中的标签
       // 定义一个list 接收素材数据数据
       list: [],
@@ -65,6 +71,23 @@ export default {
     }
   },
   methods: {
+    // 上传图片的方法
+    uploadImg (params) {
+      this.loading = true// 先弹层
+      let data = new FormData()
+      data.append('image', params.file)
+      this.$axios({
+        method: 'post',
+        url: '/user/images',
+        data
+      }).then(result => {
+        // 上传成功关掉弹层
+        this.loading = false
+        // 直接调用拉取数据的方法重新加载
+        this.getMaterial()
+      })
+    },
+
     // 改变页码的方法
     changePage (newpage) {
       this.page.currentPage = newpage
