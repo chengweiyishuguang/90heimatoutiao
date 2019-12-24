@@ -19,8 +19,8 @@
                   <el-card  class="img-card" v-for="item in list" :key="item.id">
                       <img :src="item.url" alt="">
                       <el-row class="operate" type="flex" justify="space-around" align="middel">
-                          <i class="el-icon-star-on"></i>
-                          <i class="el-icon-delete-solid"></i>
+                          <i @click="collectOrCancel(item)" :style="{color:item.is_collected ? 'red' : '#000'}" class="el-icon-star-on"></i>
+                          <i @click="delMaterial(item.id)" class="el-icon-delete-solid"></i>
                       </el-row>
                   </el-card>
 
@@ -71,6 +71,32 @@ export default {
     }
   },
   methods: {
+    // 删除用户图片素材
+    delMaterial (id) {
+      this.$confirm('您确定要删除此图片吗').then(() => {
+        this.$axios({
+          method: 'delete',
+          url: `/user/images/${id}`
+
+        }).then(result => {
+          this.getMaterial()
+        })
+      })
+    },
+    // 取消或者收藏
+    collectOrCancel (item) {
+      // 判断如果当前的item.iscollected true 取消收藏
+      this.$axios({
+        method: 'put',
+        url: `/user/images/${item.id}`,
+        data: {
+          collect: !item.is_collected// 取反因为收藏就要取消收藏
+        }
+
+      }).then(result => {
+        this.getMaterial()
+      })
+    },
     // 上传图片的方法
     uploadImg (params) {
       this.loading = true// 先弹层
@@ -142,6 +168,9 @@ export default {
             font-size:20px;
             height:30px;
             background-color:#f4f5f6;
+           i {
+               cursor: pointer;
+           }
         }
     }
 }

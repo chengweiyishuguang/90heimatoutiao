@@ -21,7 +21,8 @@ axios.interceptors.request.use(function (config) {
 // 把设置的常态之引入到此文件
 // 把lay-header里面的手动获取令牌参数去掉
 axios.defaults.transformResponse = [function (data) {
-  return JSONBig.parse(data)// 解决js处理大数据失真问题
+  // 解决删除图片的bug如果data存在的时候再转换大数据，如果不存在返回一个空的对象
+  return data ? JSONBig.parse(data) : {}// 解决js处理大数据失真问题
 }]
 
 // 响应拦截器
