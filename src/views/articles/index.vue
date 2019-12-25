@@ -7,19 +7,34 @@
        <!-- 表单容器 -->
        <el-form-item label="文章状态:">
            <!-- 放置一个单选组件 文章状态，0-草稿 1-待审核，2-审核通过，3-审核失败，4-已删除，不传为全部 -->
-           <el-radio-group v-model="searchForm.status">
+           <!-- 第一种方法 -->
+           <!-- <el-radio-group v-model="searchForm.status" @change="changeCondition">
                <el-radio :label="5">全部</el-radio>
                <el-radio :label="0">草稿</el-radio>
                <el-radio :label="1">待审核</el-radio>
                <el-radio :label="2">审核通过</el-radio>
                <el-radio :label="3">审核失败</el-radio>
 
+           </el-radio-group> -->
+           <!-- 第二种方法watch -->
+           <el-radio-group v-model="searchForm.status">
+               <el-radio :label="5">全部</el-radio>
+               <el-radio :label="0">草稿</el-radio>
+               <el-radio :label="1">待审核</el-radio>
+               <el-radio :label="2">审核通过</el-radio>
+               <el-radio :label="3">审核失败</el-radio>
            </el-radio-group>
-
        </el-form-item>
-        <el-form-item label="频道列表:">
 
-            <el-select placeholder="请选择频道:" v-model="searchForm.channel_id">
+        <el-form-item label="频道列表:">
+<!-- 第一种方法 -->
+            <!-- <el-select @change="changeCondition"  placeholder="请选择频道:" v-model="searchForm.channel_id">
+
+                <el-option v-for="item in channels" :key="item.id" :label="item.name" :value="item.id"></el-option>
+
+            </el-select> -->
+            <!-- 第二种方法watch -->
+             <el-select placeholder="请选择频道:" v-model="searchForm.channel_id">
                 <!-- label是显示值  value是存储值 -->
                 <el-option v-for="item in channels" :key="item.id" :label="item.name" :value="item.id"></el-option>
 
@@ -27,8 +42,10 @@
        </el-form-item>
         <el-form-item label="时间选择：">
             <!-- elementui的日期选择器日期范围 -->
-
-           <el-date-picker  v-model="searchForm.dateRange" type="daterange"></el-date-picker>
+            <!-- 第一种方法 -->
+           <!-- <el-date-picker @change="changeCondition" value-format="yyyy-MM-dd" v-model="searchForm.dateRange" type="daterange"></el-date-picker> -->
+           <!-- 第二种方法 -->
+           <el-date-picker value-format="yyyy-MM-dd" v-model="searchForm.dateRange" type="daterange"></el-date-picker>
        </el-form-item>
    </el-form>
     <el-row class="total" type="flex" align="middle">
@@ -53,8 +70,19 @@
             <span> <i class="el-icon-edit"></i> 修改</span>
             <span> <i class="el-icon-delete"></i> 删除</span>
         </div>
-
     </div>
+    <!-- 分页 -->
+    <el-row type="flex" justify="center" align="middle" style="height:60px">
+        <el-pagination
+        background
+        layout="prev, pager, next"
+        :total="page.total"
+        :current-page="page.currentPage"
+        :page-size="page.pageSize"
+        >
+
+        </el-pagination>
+    </el-row>
 </el-card>
 </template>
 
@@ -69,7 +97,24 @@ export default {
       },
       channels: [], // 接收频道数据
       list: [],
-      defaultImg: require('../../assets/img/loginIMG.jpg')// 默认图片
+      defaultImg: require('../../assets/img/loginIMG.jpg'), // 默认图片
+
+      page: {
+        currentPage: 1,
+        pageSize: 10, // 黑马头条限制最低十条
+        total: 0
+      }
+    }
+  },
+  watch: {
+    searchForm: {
+      handler: function () {
+        // 此时数据已经变成最新的了
+        // this指向组件实例
+        // 直接调用条件改变的方法
+        this.changeCondition()
+      },
+      deep: true
     }
   },
   filters: {
@@ -101,6 +146,15 @@ export default {
     }
   },
   methods: {
+    changeCondition () {
+      let params = {
+        status: this.searchForm.status === 5 ? null : this.searchForm.status, // 因为5是前端定义的标识，如果等于5表示查全部，全部应该什么都不传直接传null
+        channel_id: this.searchForm.channel_id,
+        begin_pubdate: this.searchForm.dateRange.length ? this.searchForm.dateRange[0] : null,
+        end_pubdate: this.searchForm.dateRange.length > 1 ? this.searchForm.dateRange[1] : null
+      }
+      this.getArticles(params)
+    },
     // 获取所有的频道
     getChannels () {
       this.$axios({
@@ -109,11 +163,13 @@ export default {
         this.channels = reslut.data.channels
       })
     },
-    getArticles () {
+    getArticles (params) {
       this.$axios({
-        url: '/articles'
+        url: '/articles',
+        params
       }).then(result => {
         this.list = result.data.results// 获取文章列表数据
+        this.page.total = result.data.total_count// 总页数
       })
     }
 
