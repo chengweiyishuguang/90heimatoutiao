@@ -104,13 +104,15 @@ export default {
     publishArticle (draft) {
       this.$refs.publishForm.validate(isOK => {
         if (isOK) {
-          console.log('校验通过')
-          // 调用发布接口
+          // 判断是修改还是发布文章
+          // 已知修改和发布的区别是修改有articleId,发布没有
+          // 所以我们要看看是否有articleId
+          let{ articleId } = this.$route.params
           this.$axios({
-            url: '/articles',
-            method: 'post',
+            url: articleId ? `/articles/${articleId}` : '/articles',
+            method: articleId ? 'put' : 'post',
             params: { draft }, // 查询参数
-            data: this.formData // 请求体参数
+            data: this.formData// 请求参数
           }).then(() => {
             this.$message({
               type: 'success',
@@ -119,6 +121,53 @@ export default {
             // 跳转到文章列表页
             this.$router.push('/home/articles')
           })
+          // 如果articleId存在调用修改接口
+          // if (articleId) {
+          //   // 修改接口
+          //   this.$axios({
+          //     url: `/articles/${articleId}`,
+          //     params: { draft }, // 查询参数
+          //     data: this.formData// 请求参数
+          //   }).then(() => {
+          //     this.$message({
+          //       type: 'success',
+          //       message: '保存成功'
+          //     })
+          //     // 跳转到文章列表页
+          //     this.$router.push('/home/articles')
+          //   })
+          // } else {
+          //   // 不存在调用发布接口
+          //   this.$axios({
+          //     url: '/articles',
+          //     method: 'post',
+          //     params: { draft }, // 查询参数
+          //     data: this.formData // 请求体参数
+          //   }).then(() => {
+          //     this.$message({
+          //       type: 'success',
+          //       message: '保存成功'
+          //     })
+          //     // 跳转到文章列表页
+          //     this.$router.push('/home/articles')
+          //   })
+          // }
+
+          // console.log('校验通过')
+          // // 调用发布接口
+          // this.$axios({
+          //   url: '/articles',
+          //   method: 'post',
+          //   params: { draft }, // 查询参数
+          //   data: this.formData // 请求体参数
+          // }).then(() => {
+          //   this.$message({
+          //     type: 'success',
+          //     message: '保存成功'
+          //   })
+          //   // 跳转到文章列表页
+          //   this.$router.push('/home/articles')
+          // })
         }
       })
     },
@@ -136,7 +185,7 @@ export default {
     this.getChannels()
     // 当点击修改跳入发布文章页面的时候，也就是已进入页面的时候我们就要获取是携带参数articleId过去的
     // 我们可以用this.$route.params获取到articleId，解构赋值给articleId
-    let{ articleId } = this.$route.params
+    let{ articleId } = this.$route.params// 获取动态路由参数
     // 由此可以判断如果articleId 存在表示修改文章，直接查询文章数据
 
     // 如果articleId 为空后面就不会执行
