@@ -79,6 +79,7 @@
         :total="page.total"
         :current-page="page.currentPage"
         :page-size="page.pageSize"
+        @current-change="changePage"
         >
 
         </el-pagination>
@@ -146,8 +147,20 @@ export default {
     }
   },
   methods: {
+    // 改变页码的方法
+    changePage (newPage) {
+      this.page.currentPage = newPage
+      this.getConditionArticle()
+    },
     changeCondition () {
+      this.page.currentPage = 1
+      this.getConditionArticle()
+    },
+    // 改变条件
+    getConditionArticle () {
       let params = {
+        page: this.page.currentPage,
+        per_page: this.page.pageSize,
         status: this.searchForm.status === 5 ? null : this.searchForm.status, // 因为5是前端定义的标识，如果等于5表示查全部，全部应该什么都不传直接传null
         channel_id: this.searchForm.channel_id,
         begin_pubdate: this.searchForm.dateRange.length ? this.searchForm.dateRange[0] : null,
@@ -177,7 +190,7 @@ export default {
 
   created () {
     this.getChannels()// 获取文章数据
-    this.getArticles()// 获取文章列表数据
+    this.getArticles({ page: 1, per_page: 10 })// 获取文章列表数据
   }
 }
 </script>
