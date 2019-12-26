@@ -6,15 +6,15 @@
      </template>
      </bread-crumb>
      <!-- 容器 -->
-     <el-form ref="publishForm" :model="formDate" :rules="publishRules" style="margin-left:50px" label-width="100px">
+     <el-form ref="publishForm" :model="formData" :rules="publishRules" style="margin-left:50px" label-width="100px">
          <el-form-item prop="title" label="标题">
-             <el-input v-model="formDate.title" style="width:60%"></el-input>
+             <el-input v-model="formData.title" style="width:60%"></el-input>
          </el-form-item>
          <el-form-item  prop="content" label="内容">
-             <el-input v-model="formDate.content" type="textarea" :row="4"></el-input>
+             <el-input v-model="formData.content" type="textarea" :row="4"></el-input>
          </el-form-item>
          <el-form-item prop="cover" label="封面">
-             <el-radio-group v-model="formDate.cover.type">
+             <el-radio-group v-model="formData.cover.type">
                  <!-- // 封装类型-1：自动，0-无图，1-1张，3-3张 -->
                  <el-radio :label="1">单图</el-radio>
                  <el-radio :label="3">三图</el-radio>
@@ -24,24 +24,26 @@
          </el-form-item>
          <el-form-item prop="channel_id" label="频道">
 
-             <el-select value="" v-model="formDate.channel_id">
+             <el-select value="" v-model="formData.channel_id">
                  <el-option v-for="item in channels" :key="item.id" :value="item.id" :label="item.name"></el-option>
              </el-select>
          </el-form-item>
          <el-form-item>
-             <el-button @click="publishArticle" type='primary'>发布</el-button>
-             <el-button @click="publishArticle">存入草稿</el-button>
+             <!-- 下方@click="publishArticle()括号里面可以不写，不写值是undefined，布尔值就是false -->
+             <el-button @click="publishArticle(false)" type='primary'>发布</el-button>
+             <el-button @click="publishArticle(true)">存入草稿</el-button>
          </el-form-item>
      </el-form>
  </el-card>
 </template>
 
 <script>
+
 export default {
   data () {
     return {
       channels: [], // 接收频道数据
-      formDate: {
+      formData: {
         title: '', // 文章标题
         content: '', // 文章内容
         cover: {
@@ -68,11 +70,26 @@ export default {
         this.channels = reslut.data.channels
       })
     },
-    // 发布文章
-    publishArticle () {
+    // 发布文章/发布到草稿/正式文章
+    // 当draft值为true的时候是草稿为false的时候是发布
+    publishArticle (draft) {
       this.$refs.publishForm.validate(isOK => {
         if (isOK) {
-
+          console.log('校验通过')
+          // 调用发布接口
+          this.$axios({
+            url: '/articles',
+            method: 'post',
+            params: { draft }, // 查询参数
+            data: this.formData // 请求体参数
+          }).then(() => {
+            this.$message({
+              type: 'success',
+              message: '保存成功'
+            })
+            // 跳转到文章列表页
+            this.$router.push('/home/articles')
+          })
         }
       })
     }
