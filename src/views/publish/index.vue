@@ -61,6 +61,35 @@ export default {
       }
     }
   },
+  // 因为发布文章和修改文章同时使用一个组件，
+  // 两个地址对应一个组件时如果相互切换时组件实例并不会被销毁
+  // 也就当我再发布页面上输入的文字再切换到修改页面的时候
+  // 文字也会存在，原因时因为在这种情况下不会执行钩子函数
+  // 解决办法如下
+  watch: {
+    $route: function (to, from) {
+    // 通过to里面的params判断要跳转的路径是否携带articleId，如果携带并且有参数就是修改页面
+    // 如果没有那么就是发布文章页面
+      if (to.params.articleId) {
+        // 代表修改
+
+      } else {
+        // 代表发布页面
+        // 发布的时候我们要讲整个页面的内容清空
+        // 不能用this.formData={}
+        // 直接复制data里面定义号的原始值
+        this.formData = {
+          title: '', // 文章标题
+          content: '', // 文章内容
+          cover: {
+            type: 0, // 封装类型-1：自动，0-无图，1-1张，3-3张
+            images: []// 放置封面地址发数组
+          },
+          channel_id: null // 频道id
+        }
+      }
+    }
+  },
   methods: {
     // 获取所有的频道
     getChannels () {
@@ -92,10 +121,26 @@ export default {
           })
         }
       })
+    },
+    // 通过id查询文章数据
+    getArticleId (articleId) {
+      // 调用接口获取接口
+      this.$axios({
+        url: `/articles/${articleId}`
+      }).then(result => {
+        this.formData = result.data// 将这个数据赋值给data
+      })
     }
   },
   created () {
     this.getChannels()
+    // 当点击修改跳入发布文章页面的时候，也就是已进入页面的时候我们就要获取是携带参数articleId过去的
+    // 我们可以用this.$route.params获取到articleId，解构赋值给articleId
+    let{ articleId } = this.$route.params
+    // 由此可以判断如果articleId 存在表示修改文章，直接查询文章数据
+
+    // 如果articleId 为空后面就不会执行
+    articleId && this.getArticleId(articleId)
   }
 
 }
