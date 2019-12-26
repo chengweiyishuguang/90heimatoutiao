@@ -183,8 +183,8 @@ export default {
         per_page: this.page.pageSize,
         status: this.searchForm.status === 5 ? null : this.searchForm.status, // 因为5是前端定义的标识，如果等于5表示查全部，全部应该什么都不传直接传null
         channel_id: this.searchForm.channel_id,
-        begin_pubdate: this.searchForm.dateRange.length ? this.searchForm.dateRange[0] : null,
-        end_pubdate: this.searchForm.dateRange.length > 1 ? this.searchForm.dateRange[1] : null
+        begin_pubdate: this.searchForm.dateRange && this.searchForm.dateRange.length ? this.searchForm.dateRange[0] : null,
+        end_pubdate: this.searchForm.dateRange && this.searchForm.dateRange.length > 1 ? this.searchForm.dateRange[1] : null
       }
       this.getArticles(params)
     },
