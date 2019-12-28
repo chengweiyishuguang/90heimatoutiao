@@ -23,7 +23,7 @@
              </el-radio-group>
          </el-form-item>
          <!-- 封面组件 -->
-         <cover-image :list="formData.cover.images"></cover-image>
+         <cover-image @selectTwoImg="receiveImg" :list="formData.cover.images"></cover-image>
          <el-form-item prop="channel_id" label="频道">
 
              <el-select value="" v-model="formData.channel_id">
@@ -103,6 +103,23 @@ export default {
     // }
   },
   methods: {
+    //    this.formData.cover.images[index]=url//这是错误的做法，虽然数据有变化但是不是响应式的不能保证每次都成功
+
+    // 思路是用响应式数据，也就是数据变化视图变化，数据变化是vue.js检测到了数据变化，但是vue.js对于数组的检查变化不能通过索引来处理
+
+    // 解决办法，用替换数组的方法，我们可以生成一个新的数组去替换原来的数组这里用map方法生成一个和原来数组相等长度的新数组
+
+    // vue.js会检测到新数组替换原数组进行响应式更新
+
+    // 直接把新数组赋值给老数组
+    receiveImg (url, index) {
+      this.formData.cover.images = this.formData.cover.images.map(function (item, i) {
+        if (index === i) {
+          return url
+        }
+        return item
+      })
+    },
     changeType () {
       if (this.formData.cover.type === 0 || this.formData.cover.type === -1) {
         this.formData.cover.images = []// 无图或者自动
