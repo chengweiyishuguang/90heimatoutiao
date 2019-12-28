@@ -56,7 +56,7 @@ export default {
     clickmenu (command) {
       // this.$message('触发了' + command)
       if (command === 'info') {
-
+        this.$router.push('/home/account')// 回到账户信息页
       } else if (command === 'git') {
         window.location.href = 'https://github.com/chengweiyishuguang/90heimatoutiao'
       } else {
