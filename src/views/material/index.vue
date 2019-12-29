@@ -16,8 +16,8 @@
               <!-- 生成页面解构 -->
               <div class="img-list">
                   <!-- 使用v-for遍历list -->
-                  <el-card  class="img-card" v-for="item in list" :key="item.id">
-                      <img :src="item.url" alt="">
+                  <el-card  class="img-card" v-for="(item,index) in list" :key="item.id">
+                      <img  @click="openDialog(index)" :src="item.url" alt="">
                       <el-row class="operate" type="flex" justify="space-around" align="middel">
                           <i @click="collectOrCancel(item)" :style="{color:item.is_collected ? 'red' : '#000'}" class="el-icon-star-on"></i>
                           <i @click="delMaterial(item.id)" class="el-icon-delete-solid"></i>
@@ -31,7 +31,7 @@
                 <div class="img-list">
                   <!-- 使用v-for遍历list -->
                   <el-card  class="img-card" v-for="item in list" :key="item.id">
-                      <img :src="item.url" alt="">
+                      <img  :src="item.url" alt="">
                   </el-card>
 
               </div>
@@ -51,6 +51,13 @@
               >
             </el-pagination>
          </el-row>
+         <el-dialog @opened="openEnd" :visible="dialogVisible" @close="dialogVisible = false">
+           <el-carousel  ref="myCarosel" indicator-position="outside" height="500px">
+           <el-carousel-item v-for="(item,index) in list" :key="index">
+           <h3><img style="width:100% ;height:100%" :src="item.url" alt=""></h3>
+           </el-carousel-item>
+        </el-carousel>
+         </el-dialog>
   </el-card>
 </template>
 
@@ -58,6 +65,7 @@
 export default {
   data () {
     return {
+      dialogVisible: false,
       loading: false,
       activeName: 'all', // 当前选中的标签
       // 定义一个list 接收素材数据数据
@@ -67,10 +75,19 @@ export default {
         pageSize: 8, // 默认每页条数
         total: 0// 总条数
 
-      }
+      },
+      clickIndex: -1
+
     }
   },
   methods: {
+    openEnd () {
+      this.$refs.myCarosel.setActiveItem(this.clickIndex)
+    },
+    openDialog (index) {
+      this.dialogVisible = true
+      this.clickIndex = index
+    },
     // 删除用户图片素材
     delMaterial (id) {
       this.$confirm('您确定要删除此图片吗').then(() => {
