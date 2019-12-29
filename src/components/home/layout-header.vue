@@ -2,7 +2,7 @@
 
   <el-row class="layout-header" type="flex" align="middle">
       <el-col class="left" :span="12">
-           <i class='el-icon-s-fold'></i>
+           <i @click="collapseOrOpen" :class="{'el-icon-s-unfold': collapse , 'el-icon-s-fold':!collapse}"></i>
          <span>江苏传智播客教育科技股份有限公司</span>
     </el-col>
       <el-col class="right" :span="12" >
@@ -30,6 +30,7 @@ import eventBus from '../../utils/eventBus'
 export default {
   data () {
     return {
+      collapse: false, // 默认是展开
       userInfo: {}, // 定义一个用户对象
       // 如果遇到图片需要做动态变量时先用require包裹一个地址转换成一个变量再用变量做逻辑判断
       defaultImg: require('../../assets/img/loginIMG.jpg')// 先将图片转化成了一个变量
@@ -47,6 +48,13 @@ export default {
     })
   },
   methods: {
+    // 展开或者折叠
+    collapseOrOpen () {
+      this.collapse = !this.collapse// 取反不是展开就是折叠
+      // 当头部图标改变的时候我们希望左侧的侧边栏宽度和显示都要跟着和改变
+      // 所以我们想到了eventBus进行监听
+      eventBus.$emit('changeCollapse')// 触发一个事件
+    },
     // 更新用户信息
     getUserInfo () {
       this.$axios({

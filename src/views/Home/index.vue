@@ -2,9 +2,10 @@
 <!-- 先放一个大容器 -->
   <el-container>
     <!-- 左边的容器 -->
-    <el-aside style="min-height:100vh;background-color:#353b4e; width:230px">
+    <!-- 根据状态控制样式宽度style动态绑定的用法 -->
+    <el-aside :style="{width:collapse ? '60px' :'230px'}"  style="transition: all 0.2s; min-height:100vh;background-color:#353b4e;">
       <!-- 使用组件 -->
-      <layout-aside></layout-aside>
+      <layout-aside :collapse="collapse"></layout-aside>
     </el-aside>
      <!-- 右侧容器 -->
     <el-container>
@@ -24,17 +25,26 @@
 </template>
 
 <script>
+import eventBus from '../../utils/eventBus'
 // // 引入侧边导航组件
 // import layOutAside from '../../components/home/layout-aside'
 // // 引入头部组件
 // import layOutHeader from '../../components/home/layout-header'
 
 export default {
-// 注册局部组件
-  // components: {
-  //   'layout-aside': layOutAside,
-  //   'layout-header': layOutHeader
-  // }
+  data () {
+    return {
+      collapse: false // 默认是展开
+    }
+  },
+  created () {
+  // 开启监听
+    eventBus.$on('changeCollapse', () => {
+      // 头部组件告诉折叠相关组件要改变了
+      // 我们定义一个和layout-header一样的状态里面取反我们在这里面也要取反
+      this.collapse = !this.collapse// 取反不是展开就是折叠
+    })
+  }
 }
 </script>
 
