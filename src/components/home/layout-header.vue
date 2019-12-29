@@ -8,7 +8,7 @@
       <el-col class="right" :span="12" >
           <el-row type="flex" justify="end" align="middle">
             <!-- 头像区域用三元表达式确认用户是否上传了图片，如果没上传给一个默认头像 -->
-              <img :src="!userInfo.photo ? userInfo.photo :defaultImg" alt="">
+              <img :src="userInfo.photo ? userInfo.photo : defaultImg" alt="">
               <el-dropdown @command="clickmenu">
                   <span>
                     {{userInfo.name}}

@@ -1,5 +1,5 @@
 <template>
-  <el-card>
+  <el-card v-loading="loading">
       <bread-crumb slot="header">
         <template slot="title">
             账户信息
@@ -22,7 +22,7 @@
              <el-button @click="SaveUserInfo" type="primary">保存信息</el-button>
           </el-form-item>
       </el-form>
-      <el-upload class="head-upload" action="" :show-file-list="false">
+      <el-upload :http-request="uploadImg"  class="head-upload" action="" :show-file-list="false">
           <img :src="formData.photo? formData.photo :defaultImg" alt="">
       </el-upload>
   </el-card>
@@ -32,6 +32,7 @@
 export default {
   data () {
     return {
+      loading: false,
       formData: {
         name: '', // 用户名
         intro: '', // 简介
@@ -52,6 +53,24 @@ export default {
     }
   },
   methods: {
+    // 上传图片
+    uploadImg (params) {
+      this.loading = true// 打开弹层
+      let data = new FormData()
+      data.append('photo', params.file)
+      this.$axios({
+        url: '/user/photo',
+        method: 'patch',
+        data
+        // .then中等待上传结果
+        // 因为上传图片较大我们可以给它做个弹层
+      }).then(result => {
+        this.loading = false// 关闭弹层
+        // result.data.photo能拿到上传的头像的地址我们要把它赋值给我们显示的试图
+        // 试图就是formData里面的photo
+        this.formData.photo = result.data.photo
+      })
+    },
     // 手动校验
     // 首先要给el-form绑定ref然后再给按钮定义方法在此方法里面获取表单
     // myForm里面有一个方法.
