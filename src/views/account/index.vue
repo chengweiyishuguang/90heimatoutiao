@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import eventBus from '../../utils/eventBus'
 export default {
   data () {
     return {
@@ -69,6 +70,8 @@ export default {
         // result.data.photo能拿到上传的头像的地址我们要把它赋值给我们显示的试图
         // 试图就是formData里面的photo
         this.formData.photo = result.data.photo
+        // 认为保存成功通知header组件更新信息
+        eventBus.$emit('updateUserInfo')
       })
     },
     // 手动校验
@@ -91,6 +94,8 @@ export default {
             type: 'success',
             message: '保存用户信息成功'
           })
+          // 认为保存成功通知header组件更新信息
+          eventBus.$emit('updateUserInfo')
         })
       })
     },

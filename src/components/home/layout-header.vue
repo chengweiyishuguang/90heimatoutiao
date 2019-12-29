@@ -26,7 +26,7 @@
 </template>
 
 <script>
-//
+import eventBus from '../../utils/eventBus'
 export default {
   data () {
     return {
@@ -40,18 +40,21 @@ export default {
   created () {
     // 从前端缓存中获取令牌
     // let token = localStorage.getItem('user-token')// 获取用户令牌
-    this.$axios({
-      // 地址
-      url: '/user/profile'
-      // headers: {
-      //   Authorization: `Bearer ${token}`
-      // }
 
-    }).then(result => {
-      this.userInfo = result.data
+    this.getUserInfo()// 认为更新了数据自己也应该更新
+    eventBus.$on('updateUserInfo', () => {
+      this.getUserInfo()
     })
   },
   methods: {
+    // 更新用户信息
+    getUserInfo () {
+      this.$axios({
+        url: '/user/profile'
+      }).then(result => {
+        this.userInfo = result.data
+      })
+    },
     // 点击菜单项时触发
     clickmenu (command) {
       // this.$message('触发了' + command)
