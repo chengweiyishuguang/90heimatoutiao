@@ -89,6 +89,7 @@
 </template>
 
 <script>
+import { getArticles, getChannels } from '../../actions/articles'
 export default {
   data () {
     return {
@@ -194,21 +195,14 @@ export default {
       this.getArticles(params)
     },
     // 获取所有的频道
-    getChannels () {
-      this.$axios({
-        url: '/channels'
-      }).then(reslut => {
-        this.channels = reslut.data.channels
-      })
+    async getChannels () {
+      let reslut = await getChannels()
+      this.channels = reslut.data.channels
     },
-    getArticles (params) {
-      this.$axios({
-        url: '/articles',
-        params
-      }).then(result => {
-        this.list = result.data.results// 获取文章列表数据
-        this.page.total = result.data.total_count// 总页数
-      })
+    async getArticles (params) {
+      let result = await getArticles()
+      this.list = result.data.results// 获取文章列表数据
+      this.page.total = result.data.total_count// 总页数
     }
 
   },

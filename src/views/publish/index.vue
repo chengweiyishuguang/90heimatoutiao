@@ -40,7 +40,7 @@
 </template>
 
 <script>
-
+import { getChannels } from '../../actions/articles'
 export default {
   data () {
     return {
@@ -130,12 +130,9 @@ export default {
       }
     },
     // 获取所有的频道
-    getChannels () {
-      this.$axios({
-        url: '/channels'
-      }).then(reslut => {
-        this.channels = reslut.data.channels
-      })
+    async getChannels () {
+      let reslut = await getChannels()
+      this.channels = reslut.data.channels
     },
     // 发布文章/发布到草稿/正式文章
     // 当draft值为true的时候是草稿为false的时候是发布
