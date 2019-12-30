@@ -1,9 +1,12 @@
 
 // 全局前置守卫拦截器
 import router from '../router'
+import progress from 'nprogress'
+import 'nprogress/nprogress.css'
 // 全局前置守卫，当路由发生改变时这个方法里的回调函数就会执行
 router.beforeEach(function (to, from, next) {
-  console.log(to)
+  progress.start()// 开启进度条
+  // console.log(to)
   if (to.path.startsWith('/home')) {
     let token = window.localStorage.getItem('user-token')
     if (token) {
@@ -14,6 +17,10 @@ router.beforeEach(function (to, from, next) {
   } else {
     next()
   }
+})
+router.afterEach(() => {
+  // setTimeout(() => progress.done(), 1000)
+  progress.done()// 关闭进度条
 })
 
 // import router from '../router'
