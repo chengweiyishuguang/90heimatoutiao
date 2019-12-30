@@ -89,46 +89,42 @@ export default {
       this.clickIndex = index
     },
     // 删除用户图片素材
-    delMaterial (id) {
-      this.$confirm('您确定要删除此图片吗').then(() => {
-        this.$axios({
-          method: 'delete',
-          url: `/user/images/${id}`
+    async delMaterial (id) {
+      await this.$confirm('您确定要删除此图片吗')
+      await this.$axios({
+        method: 'delete',
+        url: `/user/images/${id}`
 
-        }).then(result => {
-          this.getMaterial()
-        })
       })
+      this.getMaterial()
     },
     // 取消或者收藏
-    collectOrCancel (item) {
+    async collectOrCancel (item) {
       // 判断如果当前的item.iscollected true 取消收藏
-      this.$axios({
+      await this.$axios({
         method: 'put',
         url: `/user/images/${item.id}`,
         data: {
           collect: !item.is_collected// 取反因为收藏就要取消收藏
         }
 
-      }).then(result => {
-        this.getMaterial()
       })
+      this.getMaterial()
     },
     // 上传图片的方法
-    uploadImg (params) {
+    async uploadImg (params) {
       this.loading = true// 先弹层
       let data = new FormData()
       data.append('image', params.file)
-      this.$axios({
+      await this.$axios({
         method: 'post',
         url: '/user/images',
         data
-      }).then(result => {
-        // 上传成功关掉弹层
-        this.loading = false
-        // 直接调用拉取数据的方法重新加载
-        this.getMaterial()
       })
+      // 上传成功关掉弹层
+      this.loading = false
+      // 直接调用拉取数据的方法重新加载
+      this.getMaterial()
     },
 
     // 改变页码的方法
@@ -142,8 +138,8 @@ export default {
       this.getMaterial()
     },
     // 获取素材的方法
-    getMaterial () {
-      this.$axios({
+    async getMaterial () {
+      let result = await this.$axios({
         url: '/user/images',
         params: {
           page: this.page.currentPage,
@@ -151,10 +147,9 @@ export default {
 
           collect: this.activeName === 'collect'// 传false是获取所有数据，传true是获取收藏数据
         }
-      }).then(result => {
-        this.list = result.data.results// 获取所有的图片数据
-        this.page.total = result.data.total_count// 总条数
       })
+      this.list = result.data.results// 获取所有的图片数据
+      this.page.total = result.data.total_count// 总条数
     }
 
   },

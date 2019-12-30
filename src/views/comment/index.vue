@@ -36,6 +36,7 @@
 </template>
 
 <script>
+
 export default {
   data () {
     // 定义一个数据接收返回结果
@@ -54,14 +55,13 @@ export default {
       this.page.currentPage = newpage
       this.getComment()
     },
-    getComment () {
-      this.$axios({
+    async getComment () {
+      let result = await this.$axios({
         url: '/articles',
         params: { response_type: 'comment', page: this.page.currentPage, per_page: this.page.pageSize }
-      }).then(result => {
-        this.list = result.data.results
-        this.page.total = result.data.total_count// 总条数
       })
+      this.list = result.data.results
+      this.page.total = result.data.total_count// 总条数
     },
     formatterBoolean (row, column, cellValue, index) {
       // row:当前行数据
@@ -70,21 +70,23 @@ export default {
       // index索引
       return cellValue ? '正常' : '关闭'
     },
-    openOrCloseState (row) {
+    async openOrCloseState (row) {
       let mess = row.comment_status ? '关闭' : '打开'
-      this.$confirm(`您是否确定要${mess}评论吗`, '提示').then(() => {
+      try {
+        await this.$confirm(`您是否确定要${mess}评论吗`, '提示')
         // 调用接口
-        this.$axios({
+        await this.$axios({
           method: 'put',
           url: '/comments/status',
           params: { article_id: row.id.toString() },
           // 因为当前如果是打开，就要关闭，如果关闭就要打开，取反
           data: { allow_comment: !row.comment_status }
-        }).then(result => {
-          // 表示执行成功，重新加载评论管理数据
-          this.getComment()
         })
-      })
+        // 表示执行成功，重新加载评论管理数据
+        this.getComment()
+      } catch (error) {
+
+      }
     }
   },
   created () {
