@@ -200,7 +200,7 @@ export default {
       this.channels = reslut.data.channels
     },
     async getArticles (params) {
-      let result = await getArticles()
+      let result = await getArticles(params)
       this.list = result.data.results// 获取文章列表数据
       this.page.total = result.data.total_count// 总页数
     }

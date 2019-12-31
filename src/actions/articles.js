@@ -8,6 +8,7 @@ export function getArticles (params) {
     params
   })
 }
+// 获取频道
 export function getChannels () {
   return request({
     url: API_CHANNELS
